@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,11 +29,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.splash_screen); // Set the content view to the splash screen layout
 
         if (!arePermissionsGranted()) {
             requestPermissions();
         } else {
+            showSplashScreen();
             initialize();
         }
     }
@@ -62,11 +64,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (allPermissionsGranted) {
+                showSplashScreen();
                 initialize();
             } else {
                 // Handle permissions not granted
             }
         }
+    }
+
+    private void showSplashScreen() {
+        // Delay the execution of code inside this method using a Handler
+        new Handler().postDelayed(() -> {
+            // This code will run after a certain delay (e.g., 2000 milliseconds)
+            // Add any splash screen operations or transitions here
+
+            // Proceed to initialize the app
+            initialize();
+        }, 2000); // Delay time in milliseconds (e.g., 2000ms = 2 seconds)
     }
 
     private void initialize() {
@@ -98,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
+                case TelephonyManager.CALL_STATE_IDLE:
                     isInstitutionalCall = false;
                     isCallPatched = false;
                     handler.removeCallbacks(dialRunnable);
@@ -106,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void answerCall() {
+            Toast.makeText(MainActivity.this, "Press 1 to accept", Toast.LENGTH_SHORT).show();
             Intent answerIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
             answerIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
             sendOrderedBroadcast(answerIntent, null);
@@ -124,4 +140,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(patchIntent);
         }
     }
-}
+                                           }
+                
